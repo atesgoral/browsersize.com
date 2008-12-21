@@ -1,0 +1,595 @@
+<html>
+<head>
+<base href="http://browsersize.com/">
+<title>whatsmy.browsersize.com</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="keywords" content="ates goral browser size screen resolution plugin detect">
+<meta name="generator" content="UltraEdit-32">
+<meta name="author" content="Ates Goral">
+<meta name="description" content="Find out your browser's current size plus more...">
+<link rel="stylesheet" type="text/css" href="main.css">
+<!--
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+   <dc:title>browsersize.com</dc:title>
+   <dc:description>A website featuring statistical data about visitors' desktop resolutions and installed plugins, information about most populer plug&amp;#45;ins, and online tools for resizing a browser to the desired dimensions.</dc:description>
+   <dc:creator><Agent>
+      <dc:title>Ates Goral</dc:title>
+   </Agent></dc:creator>
+   <dc:rights><Agent>
+      <dc:title>Ates Goral</dc:title>
+   </Agent></dc:rights>
+   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Interactive" />
+   <dc:source rdf:resource="http://browsersize.com/"/>
+   <license rdf:resource="http://creativecommons.org/licenses/by-nc/2.0/" />
+</Work>
+
+<License rdf:about="http://creativecommons.org/licenses/by-nc/2.0/">
+   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+   <requires rdf:resource="http://web.resource.org/cc/Notice" />
+   <requires rdf:resource="http://web.resource.org/cc/Attribution" />
+   <prohibits rdf:resource="http://web.resource.org/cc/CommercialUse" />
+   <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+</License>
+
+</rdf:RDF>
+-->
+<script type="text/javascript" language="JavaScript">
+function UniWin()
+{
+	this.width = window.innerWidth != undefined ? window.innerWidth : document.body.offsetWidth;
+	this.height = window.innerHeight != undefined ? window.innerHeight : document.body.offsetHeight;
+}
+
+function ge(id)
+{
+    return document.getElementById(id);
+}
+
+function showInfo()
+{
+	var uniwin = new UniWin();
+
+	ge("info_sw").innerHTML = screen.width;
+	ge("info_sh").innerHTML = screen.height;
+	ge("info_sc").innerHTML = screen.colorDepth;
+	ge("info_ww").innerHTML = uniwin.width;
+	ge("info_wh").innerHTML = uniwin.height;
+	ge("info_sw_m").innerHTML = screen.width;
+	ge("info_sh_m").innerHTML = screen.height;
+	ge("info_sc_m").innerHTML = screen.colorDepth;
+	ge("info_ww_m").innerHTML = uniwin.width;
+	ge("info_wh_m").innerHTML = uniwin.height;
+	
+	checkPlugin("java", detectJava);
+	checkPlugin("acrobat", detectAcrobat);
+	checkPlugin("flash", detectFlash);
+	checkPlugin("shockwave", detectDirector);
+	checkPlugin("quicktime", detectQuickTime);
+	checkPlugin("real", detectReal);
+	checkPlugin("mediaplayer", detectWindowsMedia);
+	checkPlugin("silverlight", detectSilverlight);
+	
+	ge("google_q").focus();
+}
+
+function checkPlugin(alias, fn)
+{
+    if (fn())
+    {
+        ge("plugin_" + alias).src = "i/plugin/ok.gif";
+    }
+}
+</script>
+<script language="JavaScript">
+<!--
+
+// initialize global variables
+var detectableWithVB = false;
+var pluginFound = false;
+
+function canDetectPlugins() {
+    if( detectableWithVB || (navigator.plugins && navigator.plugins.length > 0) ) {
+	return true;
+    } else {
+	return false;
+    }
+}
+
+function detectJava() {
+    pluginFound = detectPlugin('Java'); 
+    // if not found, try to detect with VisualBasic
+    if(!pluginFound && detectableWithVB) {
+    pluginFound = detectActiveXControl('JavaWebStart.isInstalled');
+	//if (!pluginFound) pluginfound = detectActiveXControl('MSJava');
+    }
+    // check for redirection
+    return pluginFound;
+}
+
+function detectAcrobat() {
+    pluginFound = detectPlugin('Adobe', 'Acrobat'); 
+    // if not found, try to detect with VisualBasic
+    if(!pluginFound && detectableWithVB) {
+	pluginFound = detectActiveXControl('AcroPDF.PDF');
+	//if (!pluginFound) pluginFound = detectActiveXControl('PDF.PDFCtrl.5');
+    }
+    // check for redirection
+    return pluginFound;
+}
+
+function detectFlash() {
+    pluginFound = detectPlugin('Shockwave','Flash'); 
+    // if not found, try to detect with VisualBasic
+    if(!pluginFound && detectableWithVB) {
+	pluginFound = detectActiveXControl('ShockwaveFlash.ShockwaveFlash');
+    }
+    // check for redirection
+    return pluginFound;
+}
+
+function detectDirector() { 
+    pluginFound = detectPlugin('Shockwave','Director'); 
+    // if not found, try to detect with VisualBasic
+    if(!pluginFound && detectableWithVB) {
+	pluginFound = detectActiveXControl('SWCtl.SWCtl');
+    }
+    // check for redirection
+    return pluginFound;
+}
+
+function detectQuickTime() {
+    pluginFound = detectPlugin('QuickTime');
+    // if not found, try to detect with VisualBasic
+    if(!pluginFound && detectableWithVB) {
+	pluginFound = detectQuickTimeActiveXControl();
+    }
+    return pluginFound;
+}
+
+function detectReal() {
+    pluginFound = detectPlugin('RealPlayer');
+    // if not found, try to detect with VisualBasic
+    if(!pluginFound && detectableWithVB) {
+	pluginFound = (detectActiveXControl('rmocx.RealPlayer G2 Control') ||
+		       detectActiveXControl('RealPlayer.RealPlayer(tm) ActiveX Control (32-bit)') ||
+		       detectActiveXControl('RealVideo.RealVideo(tm) ActiveX Control (32-bit)'));
+    }	
+    return pluginFound;
+}
+
+function detectWindowsMedia() {
+    pluginFound = detectPlugin('Windows Media');
+    // if not found, try to detect with VisualBasic
+    if(!pluginFound && detectableWithVB) {
+	pluginFound = detectActiveXControl('MediaPlayer.MediaPlayer');
+    }
+    return pluginFound;
+}
+
+function detectSilverlight() {
+    pluginFound = detectPlugin('Silverlight');
+    // if not found, try to detect with VisualBasic
+    if(!pluginFound && detectableWithVB) {
+	pluginFound = detectActiveXControl('AgControl.AgControl');
+    }
+    return pluginFound;
+}
+
+function detectPlugin() {
+    // allow for multiple checks in a single pass
+    var daPlugins = detectPlugin.arguments;
+    // consider pluginFound to be false until proven true
+    var pluginFound = false;
+    // if plugins array is there and not fake
+    if (navigator.plugins && navigator.plugins.length > 0) {
+	var pluginsArrayLength = navigator.plugins.length;
+	// for each plugin...
+	for (pluginsArrayCounter=0; pluginsArrayCounter < pluginsArrayLength; pluginsArrayCounter++ ) {
+	    // loop through all desired names and check each against the current plugin name
+	    var numFound = 0;
+	    for(namesCounter=0; namesCounter < daPlugins.length; namesCounter++) {
+		// if desired plugin name is found in either plugin name or description
+		if( (navigator.plugins[pluginsArrayCounter].name.indexOf(daPlugins[namesCounter]) >= 0) || 
+		    (navigator.plugins[pluginsArrayCounter].description.indexOf(daPlugins[namesCounter]) >= 0) ) {
+		    // this name was found
+		    numFound++;
+		}   
+	    }
+	    // now that we have checked all the required names against this one plugin,
+	    // if the number we found matches the total number provided then we were successful
+	    if(numFound == daPlugins.length) {
+		pluginFound = true;
+		// if we've found the plugin, we can stop looking through at the rest of the plugins
+		break;
+	    }
+	}
+    }
+    return pluginFound;
+} // detectPlugin
+
+
+// Here we write out the VBScript block for MSIE Windows
+if ((navigator.userAgent.indexOf('MSIE') != -1) && (navigator.userAgent.indexOf('Win') != -1)) {
+    document.writeln('<script language="VBscript">');
+
+    document.writeln('\'do a one-time test for a version of VBScript that can handle this code');
+    document.writeln('detectableWithVB = False');
+    document.writeln('If ScriptEngineMajorVersion >= 2 then');
+    document.writeln('  detectableWithVB = True');
+    document.writeln('End If');
+
+    document.writeln('\'this next function will detect most plugins');
+    document.writeln('Function detectActiveXControl(activeXControlName)');
+    document.writeln('  on error resume next');
+    document.writeln('  detectActiveXControl = False');
+    document.writeln('  If detectableWithVB Then');
+    document.writeln('     detectActiveXControl = IsObject(CreateObject(activeXControlName))');
+    document.writeln('  End If');
+    document.writeln('End Function');
+
+    document.writeln('\'and the following function handles QuickTime');
+    document.writeln('Function detectQuickTimeActiveXControl()');
+    document.writeln('  on error resume next');
+    document.writeln('  detectQuickTimeActiveXControl = False');
+    document.writeln('  If detectableWithVB Then');
+    document.writeln('    detectQuickTimeActiveXControl = False');
+    document.writeln('    hasQuickTimeChecker = false');
+    document.writeln('    Set hasQuickTimeChecker = CreateObject("QuickTimeCheckObject.QuickTimeCheck")');
+    document.writeln('    If IsObject(hasQuickTimeChecker) Then');
+    document.writeln('      If hasQuickTimeChecker.IsQuickTimeAvailable(0) Then ');
+    document.writeln('        detectQuickTimeActiveXControl = True');
+    document.writeln('      End If');
+    document.writeln('    End If');
+    document.writeln('  End If');
+    document.writeln('End Function');
+
+    document.writeln('</scr' + 'ipt>');
+}
+// -->
+</script>
+<style>
+.label {
+    text-align: right;
+    font-weight: bold;
+}
+
+.text_under {
+    text-align: center;
+}
+
+.plugin_overlay {
+    position: relative;
+    left: 39px;
+    top: 53px;
+    z-index: 1;
+}
+
+.v_bottom {
+    vertical-align: bottom;
+}
+
+td.mini {
+    background-image: url(i/mini/client.gif);
+    text-align: center;
+    vertical-align: top;
+}
+
+td.mini input {
+    font-size: 1px;
+    font-family: sans-serif;
+    padding: 0px;
+    margin-top: 13px;
+    width: 32px;
+}
+
+.round_t {
+    background-image: url(i/round_tm.gif);
+}
+
+.round_l {
+    background-image: url(i/round_l.gif);
+}
+
+.round_r {
+    background-image: url(i/round_r.gif);
+}
+
+.round_b {
+    background-image: url(i/round_bm.gif);
+}
+
+.desktop {
+    background-color: #C2D07F;
+    background-image: url(i/mini/taskbar.gif);
+    background-repeat: repeat-x;
+    background-position: bottom;
+    border: 1px solid #8F9088;
+    vertical-align: top;
+    padding: 5px;
+}
+
+table.mini td {
+    font-size: 11px;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: #8F9088;
+    text-align: center;
+}
+
+a.mini_close {
+    background-color: #E69A9A;
+    display: block;
+}
+
+a.mini_close:hover {
+    background-color: #DE6262;
+}
+
+td.mini_buttons a {
+    background-color: #8F9088;
+    display: block;
+}
+
+td.mini_buttons a:hover {
+    background-color: #404040;
+}
+
+form {
+    margin: 0px;
+    padding: 0px;
+}
+
+.mini_toppad {
+    padding-top: 2px;
+}
+
+.mini_leftpad {
+    padding-left: 2px;
+}
+</style>
+</head>
+
+<body class="whatsmy" onload="showInfo()">
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+<tr id="ie_warn">
+    <td colspan="3" class="ie_warn">
+        <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td><img src="i/ie_shield.gif" width="22" height="23" alt="!"></td>
+            <td class="ie_text">If you're reading this message, your browser might have blocked the execution of JavaScript on this page - which will only safely resize your browser on your own will.</td>
+        </tr>
+        </table>
+    </td>
+</tr>
+<tr class="white">
+    <td width="10"><img src="i/s.gif" width="10" alt=""></td>
+    <td width="521">
+        <table cellspacing="0" cellpadding="0" border="0" width="521">
+            <tr><td width="521" id="sector_8"><a href="http://whatsmy.browsersize.com/" class="sub"><img src="i/whatsmy_logo_a.gif" width="89" height="58" alt="" border="0"><img src="i/whatsmy_logo_b.gif" width="128" height="58" alt="whatsmy" border="0"><img src="i/whatsmy_logo_c.gif" width="1" height="58" alt="" border="0"><img src="i/domain.gif" width="291" height="58" alt=".browsersize.com" border="0"><img src="i/w.gif" width="12" height="58" border="0" alt=""></a></td></tr>
+        </table>
+    </td>
+    <td class="v_middle">
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="10"></td>
+                <td class="lighter">also check out:</td>
+            </tr>
+            <tr>
+                <td class="v_middle"><img src="i/arrow_r.gif" width="8" height="7" alt=""></td>
+                <td><a href="http://setmy.browsersize.com">setmy.browsersize.com</a></td>
+            </tr>
+            <tr>
+                <td class="v_middle"><img src="i/arrow_r.gif" width="8" height="7" alt=""></td>
+                <td><a href="http://browsersize.com">browsersize.com</a></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td rowspan="5"></td>
+    <td colspan="2">
+        <table cellspacing="0" cellpadding="0" border="0" width="521">
+            <tr>
+                <td width="89" height="19" id="sector_16"><img src="i/round_b.gif" width="89" height="19" alt=""></td>
+                <td width="432" class="desc">find out your browser's current size plus more</td>
+            </tr>
+            <tr><td height="10" colspan="2"></td></tr>
+            <tr>
+                <td height="19" id="sector_16" class="tab"><img src="i/tabdot_whatsmy.gif" width="11" height="19" alt=""></td>
+                <td></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" class="white pad10">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td>
+                    <table cellpadding="0" cellspacing="10" border="0" width="250">
+                        <tr><td colspan="2"><b>Dimensions</b></td></tr>
+                        <tr><td class="label">Browser window width:</td><td id="info_ww">?</td></tr>
+                        <tr><td class="label">Browser window height:</td><td id="info_wh">?</td></tr>
+                        <tr><td class="label">Screen width:</td><td id="info_sw">?</td></tr>
+                        <tr><td class="label">Screen height:</td><td id="info_sh">?</td></tr>
+                        <tr><td class="label">Screen color depth:</td><td id="info_sc">?</td></tr>
+                    </table>
+                </td>
+                <td class="doc">
+<form action="http://www.google.ca/search" name="f" target="_blank">
+
+<table border="0" cellpadding="0" cellspacing="0" class="mini">
+    <tr>
+        <td width="6"><img src="i/round_nw.gif" width="6" height="6" alt=""></td>
+        <td colspan="2" class="round_t"><img src="i/s.gif" height="6" alt=""></td>
+        <td width="6"><img src="i/round_ne.gif" width="6" height="6" alt=""></td>
+    </tr>
+    <tr>
+        <td class="round_l"><img src="i/s.gif" width="6" alt=""></td>
+        <td class="desktop">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <table border="0" cellpadding="0" cellspacing="0" width="60">
+                            <tr><td>
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td width="55"><img src="i/mini/titlebar.gif" width="55" height="5" alt="Google"></td>
+                                        <td width="5"><a href="javascript:close()" class="mini_close"><img src="i/mini/close.gif" width="5" height="5" border="0" alt="Close"></a></td>
+                                    </tr>
+                                </table>
+                            </td></tr>
+                            <tr><td><img src="i/mini/menu.gif" width="60" height="3" alt=""></td></tr>
+                            <tr><td class="mini_buttons">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td width="1"><img src="i/mini/toolbar_pad.gif" width="1" height="3" alt=""></td>
+                                        <td width="4"><a href="javascript:history.back()"><img src="i/mini/back.gif" width="4" height="3" alt="Back" border="0"></a></td>
+                                        <td width="4"><a href="javascript:history.forward()"><img src="i/mini/fwd.gif" width="4" height="3" alt="Forward" border="0"></a></td>
+                                        <td width="5"><a href="javascript:location.reload()"><img src="i/mini/refresh.gif" width="5" height="3" alt="Refresh" border="0"></a></td>
+                                        <td width="5"><a href="javascript:stop()"><img src="i/mini/stop.gif" width="5" height="3" alt="Stop" border="0"></a></td>
+                                        <td width="4"><a href="http://browsersize.com/"><img src="i/mini/home.gif" width="4" height="3" alt="Home" border="0"></a></td>
+                                        <td width="37"><img src="i/mini/toolbar.gif" width="37" height="3" alt=""></td>
+                                    </tr>
+                                </table>
+                            </tr>
+                            <tr><td align="center" class="mini" height="29">
+                                <input maxlength="256" size="10" name="q" class="mini" id="google_q"><br>
+                            </td></tr>
+                        </table>
+                    </td>
+                    <td class="v_middle mini_leftpad"><span id="info_wh_m">?</span></td>
+                </tr>
+                <tr>
+                    <td class="mini_toppad"><span id="info_ww_m">?</span></td>
+                    <td  class="mini_toppad mini_leftpad">(<span id="info_sc_m">?</span>)</td>
+                </tr>
+            </table>
+        </td>
+        <td class="v_middle mini_leftpad"><span id="info_sh_m">?</span></td>
+        <td class="round_r"><img src="i/s.gif" width="6" alt=""></td>
+    </tr>
+    <tr>
+        <td class="round_l"><img src="i/s.gif" width="6" alt=""></td>
+        <td class="mini_toppad"><span id="info_sw_m">?</span></td>
+        <td></td>
+        <td class="round_r"><img src="i/s.gif" width="6" alt=""></td>
+    </tr>
+    <tr>
+        <td width="6"><img src="i/round_sw.gif" width="6" height="6" alt=""></td>
+        <td colspan="2" class="round_b"><img src="i/s.gif" height="6" alt=""></td>
+        <td width="6"><img src="i/round_se.gif" width="6" height="6" alt=""></td>
+    </tr>
+</table>
+
+<input type="hidden" name="hl" value="en"> 
+</form>
+<p class="lighter">World's tiniest functional browser.</p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        <table cellspacing="0" cellpadding="0" border="0" width="521">
+            <tr><td height="10" colspan="2"></td></tr>
+            <tr>
+                <td width="89" height="19" id="sector_16" class="tab"><img src="i/tabdot_whatsmy.gif" width="11" height="19" alt=""><img src="i/tabdot_whatsmy.gif" width="11" height="19" alt=""></td>
+                <td width="432"></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" class="white pad10">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td>
+                    <table cellpadding="0" cellspacing="10" border="0" width="1">
+                        <tr><td colspan="12"><b>Plug-in Check</b></td></tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_java" class="plugin_overlay"><br><a href="http://java.sun.com/products/plugin/" target="_blank" class="plugin"><img src="i/plugin/java.gif" width="48" height="48" alt="Java Plug-in" border="0"></a></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_flash" class="plugin_overlay"><br><a href="http://www.macromedia.com/software/flashplayer/" target="_blank" class="plugin"><img src="i/plugin/flash.gif" width="48" height="48" alt="Macromedia Flash Player" border="0"></a></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_shockwave" class="plugin_overlay"><br><a href="http://sdc.shockwave.com/software/shockwaveplayer/" target="_blank" class="plugin"><img src="i/plugin/shockwave.gif" width="48" height="48" alt="Macromedia Shockwave Player" border="0"></a></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_real" class="plugin_overlay"><br><a href="http://www.real.com/" target="_blank" class="plugin"><img src="i/plugin/real.gif" width="48" height="48" alt="RealPlayer" border="0"></a></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr class="text_under">
+                            <td colspan="3">Sun<br>Java Plug-in</td>
+                            <td colspan="3">Macromedia Flash Player</td>
+                            <td colspan="3">Macromedia Shockwave Player</td>
+                            <td colspan="3">Real Networks RealPlayer</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_mediaplayer" class="plugin_overlay"><br><a href="http://www.microsoft.com/windows/windowsmedia/" target="_blank" class="plugin"><img src="i/plugin/windowsmedia.gif" width="48" height="48" alt="Windows Media Player" border="0"></a></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_quicktime" class="plugin_overlay"><br><a href="http://www.apple.com/quicktime/download/" target="_blank" class="plugin"><img src="i/plugin/quicktime.gif" width="48" height="48" alt="QuickTime" border="0"></a></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_acrobat" class="plugin_overlay"><br><a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank" class="plugin"><img src="i/plugin/acrobat.gif" width="48" height="48" alt="Acrobat Reader" border="0"></a></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_silverlight" class="plugin_overlay"><br><a href="http://www.microsoft.com/silverlight/resources/install.aspx" target="_blank" class="plugin"><img src="i/plugin/silverlight.gif" width="48" height="48" alt="Silverlight" border="0"></a></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr class="text_under">
+                            <td colspan="3">Microsoft Windows Media Player</td>
+                            <td colspan="3">Apple QuickTime</td>
+                            <td colspan="3">Adobe<br>Acrobat Reader</td>
+                            <td colspan="3">Microsoft Silverlight</td>
+                        </tr>
+                    </table>
+                </td>
+                <td class="doc">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td><img src="i/plugin/ok.gif" width="13" height="13" alt=""></td>
+                            <td width="5"></td>
+                            <td class="lighter">Plug-ins already installed on your browser are marked with a green check mark.</td>
+                        </tr>
+                        <tr><td height="5" colspan="3"></td></tr>
+                        <tr>
+                            <td><img src="i/plugin/na.gif" width="13" height="13" alt=""></td>
+                            <td></td>
+                            <td class="lighter">Plug-ins that are not installed are marked with a red cross. Click on a logo to go to the download page associated with a plug-in.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2"><div class="copyright_sub">copyright &copy; 2005-2008 - Ates Goral - <a href="http://magnetiq.com/">magnetiq.com</a> - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/2.0/" target="_blank">Creative Commons License</a>.</div></td>
+</tr>
+</table>
+
+</body>
+
+<script>document.getElementById("ie_warn").style.display = "none";</script>
+<script src="http://browsersize.uservoice.com/pages/general/widgets/tab.js?alignment=right&amp;color=00BCBA" type="text/javascript"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-912088-3");
+pageTracker._setDomainName(".browsersize.com");
+pageTracker._trackPageview();
+</script>
+</body>
+</html> 
