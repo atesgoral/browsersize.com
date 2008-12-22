@@ -3,217 +3,126 @@
 <base href="http://browsersize.com/">
 <title>whatsmy.browsersize.com</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="keywords" content="ates goral browser size screen resolution plugin detect">
+<meta name="keywords" content="browser size screen resolution plugin detect">
 <meta name="generator" content="UltraEdit-32">
 <meta name="author" content="Ates Goral">
 <meta name="description" content="Find out your browser's current size plus more...">
-<link rel="stylesheet" type="text/css" href="main.css">
-<!--
-<rdf:RDF xmlns="http://web.resource.org/cc/"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-<Work rdf:about="">
-   <dc:title>browsersize.com</dc:title>
-   <dc:description>A website featuring statistical data about visitors' desktop resolutions and installed plugins, information about most populer plug&amp;#45;ins, and online tools for resizing a browser to the desired dimensions.</dc:description>
-   <dc:creator><Agent>
-      <dc:title>Ates Goral</dc:title>
-   </Agent></dc:creator>
-   <dc:rights><Agent>
-      <dc:title>Ates Goral</dc:title>
-   </Agent></dc:rights>
-   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Interactive" />
-   <dc:source rdf:resource="http://browsersize.com/"/>
-   <license rdf:resource="http://creativecommons.org/licenses/by-nc/2.0/" />
-</Work>
+<link rel="stylesheet" type="text/css" href="main.css?200812211150">
+<script type="text/javascript">
+window.onload = function () {
+	function $(id) { return document.getElementById(id); }
 
-<License rdf:about="http://creativecommons.org/licenses/by-nc/2.0/">
-   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
-   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
-   <requires rdf:resource="http://web.resource.org/cc/Notice" />
-   <requires rdf:resource="http://web.resource.org/cc/Attribution" />
-   <prohibits rdf:resource="http://web.resource.org/cc/CommercialUse" />
-   <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
-</License>
+	function detectPlugin(substrs) {
+		if (navigator.plugins) {
+			for (var i = 0; i < navigator.plugins.length; i++) {
+				var plugin = navigator.plugins[i];
+				var haystack = plugin.name + plugin.description;
+				var found = 0;
 
-</rdf:RDF>
--->
-<script type="text/javascript" language="JavaScript">
-function UniWin()
-{
-	this.width = window.innerWidth != undefined ? window.innerWidth : document.body.offsetWidth;
-	this.height = window.innerHeight != undefined ? window.innerHeight : document.body.offsetHeight;
-}
+				for (var j = 0; j < substrs.length; j++) {
+					if (haystack.indexOf(substrs[j]) != -1) {
+						found++;
+					}
+				}
+				
+				if (found == substrs.length) {
+					return true;
+				}
+			}
+		}
 
-function ge(id)
-{
-    return document.getElementById(id);
-}
+		return false;
+    }
+    
+    function detectObject(progIds) {
+    	//alert("hi " + typeof CreateObject);
+		//if (typeof CreateObject != "undefined") {
+    		for (var i = 0; i < progIds.length; i++) {
+    			var x = Script.CreateObject(progIds[i]);
+	 			/*if (typeof CreateObject(progIds[i]) == "object") {
+	 				return true;
+	 			}*/
+	 		}
+	 	//}
 
-function showInfo()
-{
-	var uniwin = new UniWin();
+	 	return false;
+	 }
 
-	ge("info_sw").innerHTML = screen.width;
-	ge("info_sh").innerHTML = screen.height;
-	ge("info_sc").innerHTML = screen.colorDepth;
-	ge("info_ww").innerHTML = uniwin.width;
-	ge("info_wh").innerHTML = uniwin.height;
-	ge("info_sw_m").innerHTML = screen.width;
-	ge("info_sh_m").innerHTML = screen.height;
-	ge("info_sc_m").innerHTML = screen.colorDepth;
-	ge("info_ww_m").innerHTML = uniwin.width;
-	ge("info_wh_m").innerHTML = uniwin.height;
+	$("ie_warn").style.display = "none";
+
+	var uniwin = {
+		width: window.innerWidth != undefined
+			? window.innerWidth
+			: document.body.offsetWidth,
+		height: window.innerHeight != undefined
+			? window.innerHeight
+			: document.body.offsetHeight
+	};
+
+	$("info_sw").innerHTML = screen.width;
+	$("info_sh").innerHTML = screen.height;
+	$("info_sc").innerHTML = screen.colorDepth;
+	$("info_ww").innerHTML = uniwin.width;
+	$("info_wh").innerHTML = uniwin.height;
+	$("info_sw_m").innerHTML = screen.width;
+	$("info_sh_m").innerHTML = screen.height;
+	$("info_sc_m").innerHTML = screen.colorDepth;
+	$("info_ww_m").innerHTML = uniwin.width;
+	$("info_wh_m").innerHTML = uniwin.height;
 	
-	checkPlugin("java", detectJava);
-	checkPlugin("acrobat", detectAcrobat);
-	checkPlugin("flash", detectFlash);
-	checkPlugin("shockwave", detectDirector);
-	checkPlugin("quicktime", detectQuickTime);
-	checkPlugin("real", detectReal);
-	checkPlugin("mediaplayer", detectWindowsMedia);
-	checkPlugin("silverlight", detectSilverlight);
+	var plugins = {
+		java: {
+			substrs: [ "Java" ],
+			progIds: [ "JavaWebStart.isInstalled" ]
+		},
+		acrobat: {
+			substrs: [ "Adobe", "Acrobat" ],
+			progIds: [ "AcroPDF.PDF", "PDF.PDFCtrl.5" ]
+		},
+		flash: {
+			substrs: [ "Shockwave", "Flash" ],
+			progIds: [ "ShockwaveFlash.ShockwaveFlash" ]
+		},
+		director: {
+			substrs: [ "Shockwave", "Director" ],
+			progIds: [ "SWCtl.SWCtl" ]
+		},
+		quicktime: {
+			substrs: [ "QuickTime" ],
+			progIds: [ "" ]
+		},
+		real: {
+			substrs: [ "RealPlayer" ],
+			progIds: [
+				"rmocx.RealPlayer G2 Control",
+				"RealPlayer.RealPlayer(tm) ActiveX Control (32-bit)",
+				"RealVideo.RealVideo(tm) ActiveX Control (32-bit)"
+			]
+		},
+		mediaplayer: {
+			substrs: [ "Windows Media" ],
+			progIds: [ "MediaPlayer.MediaPlayer" ]
+		},
+		silverlight: {
+			substrs: [ "Silverlight" ],
+			progIds: [ "AgControl.AgControl" ]
+		}
+	};
 	
-	ge("google_q").focus();
-}
+	for (var alias in plugins) {
+		var plugin = plugins[alias];
 
-function checkPlugin(alias, fn)
-{
-    if (fn())
-    {
-        ge("plugin_" + alias).src = "i/plugin/ok.gif";
-    }
-}
-</script>
-<script language="JavaScript">
-<!--
-
-// initialize global variables
-var detectableWithVB = false;
-var pluginFound = false;
-
-function canDetectPlugins() {
-    if( detectableWithVB || (navigator.plugins && navigator.plugins.length > 0) ) {
-	return true;
-    } else {
-	return false;
-    }
-}
-
-function detectJava() {
-    pluginFound = detectPlugin('Java'); 
-    // if not found, try to detect with VisualBasic
-    if(!pluginFound && detectableWithVB) {
-    pluginFound = detectActiveXControl('JavaWebStart.isInstalled');
-	//if (!pluginFound) pluginfound = detectActiveXControl('MSJava');
-    }
-    // check for redirection
-    return pluginFound;
-}
-
-function detectAcrobat() {
-    pluginFound = detectPlugin('Adobe', 'Acrobat'); 
-    // if not found, try to detect with VisualBasic
-    if(!pluginFound && detectableWithVB) {
-	pluginFound = detectActiveXControl('AcroPDF.PDF');
-	//if (!pluginFound) pluginFound = detectActiveXControl('PDF.PDFCtrl.5');
-    }
-    // check for redirection
-    return pluginFound;
-}
-
-function detectFlash() {
-    pluginFound = detectPlugin('Shockwave','Flash'); 
-    // if not found, try to detect with VisualBasic
-    if(!pluginFound && detectableWithVB) {
-	pluginFound = detectActiveXControl('ShockwaveFlash.ShockwaveFlash');
-    }
-    // check for redirection
-    return pluginFound;
-}
-
-function detectDirector() { 
-    pluginFound = detectPlugin('Shockwave','Director'); 
-    // if not found, try to detect with VisualBasic
-    if(!pluginFound && detectableWithVB) {
-	pluginFound = detectActiveXControl('SWCtl.SWCtl');
-    }
-    // check for redirection
-    return pluginFound;
-}
-
-function detectQuickTime() {
-    pluginFound = detectPlugin('QuickTime');
-    // if not found, try to detect with VisualBasic
-    if(!pluginFound && detectableWithVB) {
-	pluginFound = detectQuickTimeActiveXControl();
-    }
-    return pluginFound;
-}
-
-function detectReal() {
-    pluginFound = detectPlugin('RealPlayer');
-    // if not found, try to detect with VisualBasic
-    if(!pluginFound && detectableWithVB) {
-	pluginFound = (detectActiveXControl('rmocx.RealPlayer G2 Control') ||
-		       detectActiveXControl('RealPlayer.RealPlayer(tm) ActiveX Control (32-bit)') ||
-		       detectActiveXControl('RealVideo.RealVideo(tm) ActiveX Control (32-bit)'));
-    }	
-    return pluginFound;
-}
-
-function detectWindowsMedia() {
-    pluginFound = detectPlugin('Windows Media');
-    // if not found, try to detect with VisualBasic
-    if(!pluginFound && detectableWithVB) {
-	pluginFound = detectActiveXControl('MediaPlayer.MediaPlayer');
-    }
-    return pluginFound;
-}
-
-function detectSilverlight() {
-    pluginFound = detectPlugin('Silverlight');
-    // if not found, try to detect with VisualBasic
-    if(!pluginFound && detectableWithVB) {
-	pluginFound = detectActiveXControl('AgControl.AgControl');
-    }
-    return pluginFound;
-}
-
-function detectPlugin() {
-    // allow for multiple checks in a single pass
-    var daPlugins = detectPlugin.arguments;
-    // consider pluginFound to be false until proven true
-    var pluginFound = false;
-    // if plugins array is there and not fake
-    if (navigator.plugins && navigator.plugins.length > 0) {
-	var pluginsArrayLength = navigator.plugins.length;
-	// for each plugin...
-	for (pluginsArrayCounter=0; pluginsArrayCounter < pluginsArrayLength; pluginsArrayCounter++ ) {
-	    // loop through all desired names and check each against the current plugin name
-	    var numFound = 0;
-	    for(namesCounter=0; namesCounter < daPlugins.length; namesCounter++) {
-		// if desired plugin name is found in either plugin name or description
-		if( (navigator.plugins[pluginsArrayCounter].name.indexOf(daPlugins[namesCounter]) >= 0) || 
-		    (navigator.plugins[pluginsArrayCounter].description.indexOf(daPlugins[namesCounter]) >= 0) ) {
-		    // this name was found
-		    numFound++;
-		}   
-	    }
-	    // now that we have checked all the required names against this one plugin,
-	    // if the number we found matches the total number provided then we were successful
-	    if(numFound == daPlugins.length) {
-		pluginFound = true;
-		// if we've found the plugin, we can stop looking through at the rest of the plugins
-		break;
-	    }
+		if (detectPlugin(plugin.substrs) || detectObject(plugin.progIds)) {
+	        $("plugin_" + alias).src = "i/plugin/ok.gif";
+		}
 	}
-    }
-    return pluginFound;
-} // detectPlugin
-
-
-// Here we write out the VBScript block for MSIE Windows
-if ((navigator.userAgent.indexOf('MSIE') != -1) && (navigator.userAgent.indexOf('Win') != -1)) {
+	
+	$("google_q").focus();
+};
+</script>
+<script type="text/javascript">
+if (navigator.userAgent.indexOf("MSIE") != -1
+	&& navigator.userAgent.indexOf("Win") != -1) {
     document.writeln('<script language="VBscript">');
 
     document.writeln('\'do a one-time test for a version of VBScript that can handle this code');
@@ -251,108 +160,9 @@ if ((navigator.userAgent.indexOf('MSIE') != -1) && (navigator.userAgent.indexOf(
 }
 // -->
 </script>
-<style>
-.label {
-    text-align: right;
-    font-weight: bold;
-}
-
-.text_under {
-    text-align: center;
-}
-
-.plugin_overlay {
-    position: relative;
-    left: 39px;
-    top: 53px;
-    z-index: 1;
-}
-
-.v_bottom {
-    vertical-align: bottom;
-}
-
-td.mini {
-    background-image: url(i/mini/client.gif);
-    text-align: center;
-    vertical-align: top;
-}
-
-td.mini input {
-    font-size: 1px;
-    font-family: sans-serif;
-    padding: 0px;
-    margin-top: 13px;
-    width: 32px;
-}
-
-.round_t {
-    background-image: url(i/round_tm.gif);
-}
-
-.round_l {
-    background-image: url(i/round_l.gif);
-}
-
-.round_r {
-    background-image: url(i/round_r.gif);
-}
-
-.round_b {
-    background-image: url(i/round_bm.gif);
-}
-
-.desktop {
-    background-color: #C2D07F;
-    background-image: url(i/mini/taskbar.gif);
-    background-repeat: repeat-x;
-    background-position: bottom;
-    border: 1px solid #8F9088;
-    vertical-align: top;
-    padding: 5px;
-}
-
-table.mini td {
-    font-size: 11px;
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: #8F9088;
-    text-align: center;
-}
-
-a.mini_close {
-    background-color: #E69A9A;
-    display: block;
-}
-
-a.mini_close:hover {
-    background-color: #DE6262;
-}
-
-td.mini_buttons a {
-    background-color: #8F9088;
-    display: block;
-}
-
-td.mini_buttons a:hover {
-    background-color: #404040;
-}
-
-form {
-    margin: 0px;
-    padding: 0px;
-}
-
-.mini_toppad {
-    padding-top: 2px;
-}
-
-.mini_leftpad {
-    padding-left: 2px;
-}
-</style>
 </head>
 
-<body class="whatsmy" onload="showInfo()">
+<body class="whatsmy">
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr id="ie_warn">
@@ -420,7 +230,7 @@ form {
                     </table>
                 </td>
                 <td class="doc">
-<form action="http://www.google.ca/search" name="f" target="_blank">
+<form action="http://www.google.ca/search" name="f">
 
 <table border="0" cellpadding="0" cellspacing="0" class="mini">
     <tr>
@@ -507,23 +317,23 @@ form {
 </tr>
 <tr>
     <td colspan="2" class="white pad10">
-        <table cellpadding="0" cellspacing="0" border="0">
+        <table cellpadding="0" cellspacing="0" border="0" width="800">
             <tr>
                 <td>
                     <table cellpadding="0" cellspacing="10" border="0" width="1">
                         <tr><td colspan="12"><b>Plug-in Check</b></td></tr>
                         <tr>
                             <td>&nbsp;</td>
-                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_java" class="plugin_overlay"><br><a href="http://java.sun.com/products/plugin/" target="_blank" class="plugin"><img src="i/plugin/java.gif" width="48" height="48" alt="Java Plug-in" border="0"></a></td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_java" class="plugin_overlay"><br><a href="http://java.sun.com/products/plugin/" class="plugin"><img src="i/plugin/java.gif" width="48" height="48" alt="Java Plug-in" border="0"></a></td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_flash" class="plugin_overlay"><br><a href="http://www.macromedia.com/software/flashplayer/" target="_blank" class="plugin"><img src="i/plugin/flash.gif" width="48" height="48" alt="Macromedia Flash Player" border="0"></a></td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_flash" class="plugin_overlay"><br><a href="http://www.macromedia.com/software/flashplayer/" class="plugin"><img src="i/plugin/flash.gif" width="48" height="48" alt="Macromedia Flash Player" border="0"></a></td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_shockwave" class="plugin_overlay"><br><a href="http://sdc.shockwave.com/software/shockwaveplayer/" target="_blank" class="plugin"><img src="i/plugin/shockwave.gif" width="48" height="48" alt="Macromedia Shockwave Player" border="0"></a></td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_director" class="plugin_overlay"><br><a href="http://sdc.shockwave.com/software/shockwaveplayer/" class="plugin"><img src="i/plugin/shockwave.gif" width="48" height="48" alt="Macromedia Shockwave Player" border="0"></a></td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_real" class="plugin_overlay"><br><a href="http://www.real.com/" target="_blank" class="plugin"><img src="i/plugin/real.gif" width="48" height="48" alt="RealPlayer" border="0"></a></td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_real" class="plugin_overlay"><br><a href="http://www.real.com/" class="plugin"><img src="i/plugin/real.gif" width="48" height="48" alt="RealPlayer" border="0"></a></td>
                             <td>&nbsp;</td>
                         </tr>
                         <tr class="text_under">
@@ -534,16 +344,16 @@ form {
                         </tr>
                         <tr>
                             <td>&nbsp;</td>
-                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_mediaplayer" class="plugin_overlay"><br><a href="http://www.microsoft.com/windows/windowsmedia/" target="_blank" class="plugin"><img src="i/plugin/windowsmedia.gif" width="48" height="48" alt="Windows Media Player" border="0"></a></td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_mediaplayer" class="plugin_overlay"><br><a href="http://www.microsoft.com/windows/windowsmedia/" class="plugin"><img src="i/plugin/windowsmedia.gif" width="48" height="48" alt="Windows Media Player" border="0"></a></td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_quicktime" class="plugin_overlay"><br><a href="http://www.apple.com/quicktime/download/" target="_blank" class="plugin"><img src="i/plugin/quicktime.gif" width="48" height="48" alt="QuickTime" border="0"></a></td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_quicktime" class="plugin_overlay"><br><a href="http://www.apple.com/quicktime/download/" class="plugin"><img src="i/plugin/quicktime.gif" width="48" height="48" alt="QuickTime" border="0"></a></td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_acrobat" class="plugin_overlay"><br><a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank" class="plugin"><img src="i/plugin/acrobat.gif" width="48" height="48" alt="Acrobat Reader" border="0"></a></td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_acrobat" class="plugin_overlay"><br><a href="http://www.adobe.com/products/acrobat/readstep2.html" class="plugin"><img src="i/plugin/acrobat.gif" width="48" height="48" alt="Acrobat Reader" border="0"></a></td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_silverlight" class="plugin_overlay"><br><a href="http://www.microsoft.com/silverlight/resources/install.aspx" target="_blank" class="plugin"><img src="i/plugin/silverlight.gif" width="48" height="48" alt="Silverlight" border="0"></a></td>
+                            <td width="48"><img src="i/plugin/na.gif" width="13" height="13" alt="" id="plugin_silverlight" class="plugin_overlay"><br><a href="http://www.microsoft.com/silverlight/resources/install.aspx" class="plugin"><img src="i/plugin/silverlight.gif" width="48" height="48" alt="Silverlight" border="0"></a></td>
                             <td>&nbsp;</td>
                         </tr>
                         <tr class="text_under">
@@ -574,13 +384,12 @@ form {
     </td>
 </tr>
 <tr>
-    <td colspan="2"><div class="copyright_sub">copyright &copy; 2005-2008 - Ates Goral - <a href="http://magnetiq.com/">magnetiq.com</a> - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/2.0/" target="_blank">Creative Commons License</a>.</div></td>
+    <td colspan="2"><div class="copyright_sub">copyright &copy; 2005-2008 - Ates Goral - <a href="http://magnetiq.com/">magnetiq.com</a> - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/2.0/">Creative Commons License</a>.</div></td>
 </tr>
 </table>
 
 </body>
 
-<script>document.getElementById("ie_warn").style.display = "none";</script>
 <script src="http://browsersize.uservoice.com/pages/general/widgets/tab.js?alignment=right&amp;color=00BCBA" type="text/javascript"></script>
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
