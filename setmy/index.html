@@ -11,7 +11,7 @@
 <script type="text/javascript">
 function $(id) { return document.getElementById(id); }
 
-function addLinks() {
+function init() {
 	var setFn = function (w, h) {
 		if (w > window.screen.width || h > window.screen.height) {
 			window.moveTo(0,0);
@@ -34,6 +34,16 @@ function addLinks() {
 	$("set_custom").onclick = function () {
 		setFn($("width").value, $("height").value);	
 	};
+	
+	var tokens = /\/(\d+)x(\d+)(!?)$/.exec(window.location.pathname);
+	
+	if (tokens) {
+		setFn(tokens[1], tokens[2]);
+		
+		if (tokens[3] == "!") {
+			window.history.back();
+		}
+	}
 };
 </script>
 </head>
@@ -77,7 +87,7 @@ function addLinks() {
     </td>
 </tr>
 <tr>
-    <td rowspan="5"></td>
+    <td rowspan="7"></td>
     <td colspan="2">
         <table cellspacing="0" cellpadding="0" border="0" width="521">
             <tr>
@@ -137,6 +147,52 @@ Your generosity will help keep this service up and running, free of any ads.</p>
         <table cellpadding="0" cellspacing="0" border="0" width="800">
             <tr>
                 <td>
+                    <table cellpadding="10" cellspacing="0" border="0" width="450" class="grid">
+                        <tr id="link">
+                            <td><a href="http://setmy.browsersize.com/640x480">640 x 480</a></td>
+                            <td><a href="http://setmy.browsersize.com/800x600">800 x 600</a></td>
+                            <td class="grid_right"><a href="http://setmy.browsersize.com/1024x768">1024 x 768</a></td>
+                        </tr>
+                        <tr id="link" class="grid_bottom">
+                            <td><a href="http://setmy.browsersize.com/1152x864">1152 x 864</a></td>
+                            <td><a href="http://setmy.browsersize.com/1280x1024">1280 x 1024</a></td>
+                            <td class="grid_right"><a href="http://setmy.browsersize.com/1600x1200">1600 x 1200</a></td>
+                        </tr>
+                    </table>
+                    <div class="pad">
+                        <br><br>
+                        URL syntax:<br>
+                        http://setmy.browsersize.com/&lt;width&gt;x&lt;height&gt;[!]<br><br>
+                        Examples:<br>
+                        <a href="http://setmy.browsersize.com/900x500">http://setmy.browsersize.com/900x500</a><br>
+                        <a href="http://setmy.browsersize.com/750x550!">http://setmy.browsersize.com/750x550!</a><br>
+                    </div>
+                </td>
+                <td class="doc">
+                	Click on one of the links on the left to set your browser's size by going to a URL.
+                    <p>You can create your own links that specify arbitrary dimensions. Start with "http://setmy.browsersize.com/", append the width, an "x" as the delimiter and finally the height.
+                    A "!" at the end makes the browser go back to the page that you were previously on.</p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        <table cellspacing="0" cellpadding="0" border="0" width="521">
+            <tr><td height="10" colspan="2"></td></tr>
+            <tr>
+                <td width="89" height="19" id="sector_16" class="tab"><img src="i/tabdot_setmy.gif" width="11" height="19" alt=""><img src="i/tabdot_setmy.gif" width="11" height="19" alt=""><img src="i/tabdot_setmy.gif" width="11" height="19" alt=""></td>
+                <td width="432"></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" class="white pad10">
+        <table cellpadding="0" cellspacing="0" border="0" width="800">
+            <tr>
+                <td>
                     <table cellpadding="0" cellspacing="10" border="0" width="450">
                         <tr class="button">
                             <td><label for="width">Width</label></td>
@@ -150,19 +206,21 @@ Your generosity will help keep this service up and running, free of any ads.</p>
                         </tr>
                     </table>
                 </td>
-                <td class="doc">To set your browser's size to a custom size, enter the width and height and click <strong>Set</strong>.</td>
+                <td class="doc">
+                	To set your browser's size to a custom size, enter the width and height and click <strong>Set</strong>.
+                </td>
             </tr>
         </table>
     </td>
 </tr>
 <tr>
-    <td colspan="2"><div class="copyright_sub">copyright &copy; 2005-2008 - Ates Goral - <a href="http://magnetiq.com/">magnetiq.com</a> - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/2.0/">Creative Commons License</a>.</div></td>
+    <td colspan="2"><div class="copyright_sub">copyright &copy; 2005-2008 - Ates Goral - <a href="http://magnetiq.com/">magnetiq.com</a></div></td>
 </tr>
 </table>
 
 </body>
 
-<script type="text/javascript">addLinks();</script>
+<script type="text/javascript">init();</script>
 <script src="http://browsersize.uservoice.com/pages/general/widgets/tab.js?alignment=right&amp;color=00BCBA" type="text/javascript"></script>
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
