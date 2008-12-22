@@ -3,50 +3,39 @@
 <base href="http://browsersize.com/">
 <title>setmy.browsersize.com</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="keywords" content="ates goral browser size screen resolution set resize">
+<meta name="keywords" content="browser size screen resolution set resize">
 <meta name="generator" content="UltraEdit-32">
 <meta name="author" content="Ates Goral">
 <meta name="description" content="A nifty online tool for setting your browser size while doing Web design.">
-<link rel="stylesheet" type="text/css" href="main.css">
-<!--
-<rdf:RDF xmlns="http://web.resource.org/cc/"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-<Work rdf:about="">
-   <dc:title>browsersize.com</dc:title>
-   <dc:description>A website featuring statistical data about visitors' desktop resolutions and installed plugins, information about most populer plug&amp;#45;ins, and online tools for resizing a browser to the desired dimensions.</dc:description>
-   <dc:creator><Agent>
-      <dc:title>Ates Goral</dc:title>
-   </Agent></dc:creator>
-   <dc:rights><Agent>
-      <dc:title>Ates Goral</dc:title>
-   </Agent></dc:rights>
-   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Interactive" />
-   <dc:source rdf:resource="http://browsersize.com/"/>
-   <license rdf:resource="http://creativecommons.org/licenses/by-nc/2.0/" />
-</Work>
+<link rel="stylesheet" type="text/css" href="main.css?200812211121">
+<script type="text/javascript">
+window.onload = function () {
+	function $(id) { return document.getElementById(id); }
 
-<License rdf:about="http://creativecommons.org/licenses/by-nc/2.0/">
-   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
-   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
-   <requires rdf:resource="http://web.resource.org/cc/Notice" />
-   <requires rdf:resource="http://web.resource.org/cc/Attribution" />
-   <prohibits rdf:resource="http://web.resource.org/cc/CommercialUse" />
-   <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
-</License>
+	$("ie_warn").style.display = "none";
 
-</rdf:RDF>
--->
-<script>
-function setMySize(w, h)
-{
-    if (w > screen.width || h > screen.Height)
-        moveTo(0, 0);
+	var setFn = function (w, h) {
+		if (w > window.screen.width || h > window.screen.height) {
+			window.moveTo(0,0);
+		}
+		window.resizeTo(w,h);
+	};
 
-    resizeTo(w, h);
+	var anchors = $("sizes").getElementsByTagName("a");
+	
+	for (var i = 0; i < anchors.length; i++) {
+		var anchor = anchors[i];
+		
+		anchor.href =
+			"javascript:(" + setFn.toString().replace(/\s/g, "") + ")("
+			+ anchor.innerHTML.replace(/\s*x\s*/, ",")
+			+ ");";
+	}
 
-    return false;
-}
+	$("set_custom").onclick = function () {
+		setFn($("width").value, $("height").value);	
+	};
+};
 </script>
 </head>
 
@@ -58,7 +47,7 @@ function setMySize(w, h)
         <table cellpadding="0" cellspacing="0" border="0">
         <tr>
             <td><img src="i/ie_shield.gif" width="22" height="23" alt="!"></td>
-            <td class="ie_text">If you're reading this message, your browser might have blocked the execution of JavaScript on this page - which will only safely resize your browser on your own will.</td>
+            <td class="ie_text">If you're reading this message, your browser might have blocked the execution of JavaScript on this page which does nothing but safely resize your browser at your own will.</td>
         </tr>
         </table>
     </td>
@@ -105,24 +94,24 @@ function setMySize(w, h)
 </tr>
 <tr>
     <td colspan="2" class="white pad10">
-        <table cellpadding="0" cellspacing="0" border="0">
+        <table cellpadding="0" cellspacing="0" border="0" width="800">
             <tr>
                 <td>
-                    <table cellpadding="0" cellspacing="10" border="0" width="450">
-                        <tr id="button">
-                            <td><input type="button" value="640 x 480" onclick="return setMySize(640, 480);"/></td>
-                            <td><input type="button" value="800 x 600" onclick="return setMySize(800, 600);"/></td>
-                            <td><input type="button" value="1024 x 768" onclick="return setMySize(1024, 768);"/></td>
+                    <table class="buttons" cellpadding="0" cellspacing="10" border="0" width="450" id="sizes">
+                        <tr>
+                            <td><a href="#">640 x 480</a></td>
+                            <td><a href="#">800 x 600</a></td>
+                            <td><a href="#">1024 x 768</a></td>
                         </tr>
-                        <tr id="button">
-                            <td><input type="button" value="1152 x 864" onclick="return setMySize(1152, 864);"/></td>
-                            <td><input type="button" value="1280 x 1024" onclick="return setMySize(1280, 1024);"/></td>
-                            <td><input type="button" value="1600 x 1200" onclick="return setMySize(1600, 1200);"/></td>
+                        <tr>
+                            <td><a href="#">1152 x 864</a></td>
+                            <td><a href="#">1280 x 1024</a></td>
+                            <td><a href="#">1600 x 1200</a></td>
                         </tr>
                     </table>
                 </td>
                 <td class="doc">
-                Click on one of the buttons on the left to set your browser's size to one of these standard screen resolutions.
+                Click on one of the links on the left to set your browser's size to one of the standard screen resolutions, or use them as <a href="http://en.wikipedia.org/wiki/Bookmarklet">bookmarklets</a>.
 <p class="donate" style="background-color: #FDF0E6">
 If you're a frequent user of setmy.browsersize.com,
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=1046615">please consider making a small donation</a>.
@@ -145,19 +134,19 @@ Your generosity will help keep this service up and running, free of any ads.</p>
 </tr>
 <tr>
     <td colspan="2" class="white pad10">
-        <table cellpadding="0" cellspacing="0" border="0">
+        <table cellpadding="0" cellspacing="0" border="0" width="800">
             <tr>
                 <td>
                     <table cellpadding="0" cellspacing="10" border="0" width="450">
-                        <tr id="button">
+                        <tr class="button">
                             <td><label for="width">Width</label></td>
                             <td><label for="height">Height</label></td>
                             <td></td>
                         </tr>
-                        <tr id="button">
+                        <tr class="button">
                             <td><input type="text" id="width" value="1024"/></td>
                             <td><input type="text" id="height" value="768"/></td>
-                            <td><input type="button" value="Set" onclick="return setMySize(document.getElementById('width').value, document.getElementById('height').value);"/></td>
+                            <td><input id="set_custom" type="button" value="Set"/></td>
                         </tr>
                     </table>
                 </td>
@@ -166,58 +155,13 @@ Your generosity will help keep this service up and running, free of any ads.</p>
         </table>
     </td>
 </tr>
-<!--tr>
-    <td colspan="2">
-        <table cellspacing="0" cellpadding="0" border="0" width="521">
-            <tr><td height="10" colspan="2"></td></tr>
-            <tr>
-                <td width="89" height="19" id="sector_16" class="tab"><img src="i/tabdot_setmy.gif" width="11" height="19" alt=""><img src="i/tabdot_setmy.gif" width="11" height="19" alt=""></td>
-                <td width="432"></td>
-            </tr>
-        </table>
-    </td>
-</tr>
 <tr>
-    <td colspan="2" class="white pad10">
-        <table cellpadding="0" cellspacing="0" border="0">
-            <tr>
-                <td>
-                    <table cellpadding="10" cellspacing="0" border="0" width="450" class="grid">
-                        <tr id="link">
-                            <td><a href="http://setmy.browsersize.com/640x480">640 x 480</a></td>
-                            <td><a href="http://setmy.browsersize.com/800x600">800 x 600</a></td>
-                            <td class="grid_right"><a href="http://setmy.browsersize.com/1024x768">1024 x 768</a></td>
-                        </tr>
-                        <tr id="link" class="grid_bottom">
-                            <td><a href="http://setmy.browsersize.com/1152x864">1152 x 864</a></td>
-                            <td><a href="http://setmy.browsersize.com/1280x1024">1280 x 1024</a></td>
-                            <td class="grid_right"><a href="http://setmy.browsersize.com/1600x1200">1600 x 1200</a></td>
-                        </tr>
-                    </table>
-                    <div class="pad">
-                        <br><br>
-                        URL syntax:<br>
-                        http://setmy.browsersize.com/&lt;width&gt;x&lt;height&gt;<br><br>
-                        Example (for 900 by 500 pixels):<br>
-                        <a href="http://setmy.browsersize.com/900x500">http://setmy.browsersize.com/900x500</a><br>
-                    </div>
-                </td>
-                <td class="doc">Alternatively, click on one of the links on the left to set your browser's size by going to a URL and automatically coming back.
-                    <p>The cool implication of this is that you can actually bookmark these links and even put them on your browser's links/bookmarks toolbar. This allows you to set your browser's size with a single click and practically without leaving the page that you're looking at. And you get this functionality without any special browser add-ons or extensions!</p>
-                    <p>You can even create your own links that set your browser's size to arbitrary sizes. Start with "http://setmy.browsersize.com/", append the width, an "x" as the separator and finally, the height.</p>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr-->
-<tr>
-    <td colspan="2"><div class="copyright_sub">copyright &copy; 2005-2008 - Ates Goral - <a href="http://magnetiq.com/">magnetiq.com</a> - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/2.0/" target="_blank">Creative Commons License</a>.</div></td>
+    <td colspan="2"><div class="copyright_sub">copyright &copy; 2005-2008 - Ates Goral - <a href="http://magnetiq.com/">magnetiq.com</a> - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/2.0/">Creative Commons License</a>.</div></td>
 </tr>
 </table>
 
 </body>
 
-<script>document.getElementById("ie_warn").style.display = "none";</script>
 <script src="http://browsersize.uservoice.com/pages/general/widgets/tab.js?alignment=right&amp;color=00BCBA" type="text/javascript"></script>
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
