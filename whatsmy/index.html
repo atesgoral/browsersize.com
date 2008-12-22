@@ -9,47 +9,89 @@
 <meta name="description" content="Find out your browser's current size plus more...">
 <link rel="stylesheet" type="text/css" href="main.css?200812211150">
 <script type="text/javascript">
-window.onload = function () {
-	function $(id) { return document.getElementById(id); }
+function $(id) { return document.getElementById(id); }
 
-	function detectPlugin(substrs) {
-		if (navigator.plugins) {
-			for (var i = 0; i < navigator.plugins.length; i++) {
-				var plugin = navigator.plugins[i];
-				var haystack = plugin.name + plugin.description;
-				var found = 0;
+function detectPlugin(substrs) {
+	if (navigator.plugins) {
+		for (var i = 0; i < navigator.plugins.length; i++) {
+			var plugin = navigator.plugins[i];
+			var haystack = plugin.name + plugin.description;
+			var found = 0;
 
-				for (var j = 0; j < substrs.length; j++) {
-					if (haystack.indexOf(substrs[j]) != -1) {
-						found++;
-					}
-				}
-				
-				if (found == substrs.length) {
-					return true;
+			for (var j = 0; j < substrs.length; j++) {
+				if (haystack.indexOf(substrs[j]) != -1) {
+					found++;
 				}
 			}
+			
+			if (found == substrs.length) {
+				return true;
+			}
 		}
+	}
 
-		return false;
-    }
-    
-    function detectObject(progIds) {
-    	//alert("hi " + typeof CreateObject);
-		//if (typeof CreateObject != "undefined") {
-    		for (var i = 0; i < progIds.length; i++) {
-    			var x = Script.CreateObject(progIds[i]);
-	 			/*if (typeof CreateObject(progIds[i]) == "object") {
-	 				return true;
-	 			}*/
-	 		}
-	 	//}
+	return false;
+}
 
-	 	return false;
-	 }
+function detectObject(progIds, fns) {
+	for (var i = 0; i < progIds.length; i++) {
+		try {
+			var obj = new ActiveXObject(progIds[i]);
 
-	$("ie_warn").style.display = "none";
+			if (obj) {			
+				return fns && fns[i]
+					? fns[i].call(obj)
+					: true;
+			}
+		} catch (e) {
+			// Ignore
+		}
+	}
 
+ 	return false;
+};
+
+var plugins = {
+	java: {
+		substrs: [ "Java" ],
+		progIds: [ "JavaWebStart.isInstalled" ]
+	},
+	acrobat: {
+		substrs: [ "Adobe", "Acrobat" ],
+		progIds: [ "AcroPDF.PDF", "PDF.PDFCtrl.5" ]
+	},
+	flash: {
+		substrs: [ "Shockwave", "Flash" ],
+		progIds: [ "ShockwaveFlash.ShockwaveFlash" ]
+	},
+	director: {
+		substrs: [ "Shockwave", "Director" ],
+		progIds: [ "SWCtl.SWCtl" ]
+	},
+	quicktime: {
+		substrs: [ "QuickTime" ],
+		progIds: [ "QuickTimeCheckObject.QuickTimeCheck" ],
+		fns: [ function () { return this.IsQuickTimeAvailable(0); } ]
+	},
+	real: {
+		substrs: [ "RealPlayer" ],
+		progIds: [
+			"rmocx.RealPlayer G2 Control",
+			"RealPlayer.RealPlayer(tm) ActiveX Control (32-bit)",
+			"RealVideo.RealVideo(tm) ActiveX Control (32-bit)"
+		]
+	},
+	mediaplayer: {
+		substrs: [ "Windows Media" ],
+		progIds: [ "MediaPlayer.MediaPlayer" ]
+	},
+	silverlight: {
+		substrs: [ "Silverlight" ],
+		progIds: [ "AgControl.AgControl" ]
+	}
+};
+
+function init() {
 	var uniwin = {
 		width: window.innerWidth != undefined
 			? window.innerWidth
@@ -69,96 +111,18 @@ window.onload = function () {
 	$("info_sc_m").innerHTML = screen.colorDepth;
 	$("info_ww_m").innerHTML = uniwin.width;
 	$("info_wh_m").innerHTML = uniwin.height;
-	
-	var plugins = {
-		java: {
-			substrs: [ "Java" ],
-			progIds: [ "JavaWebStart.isInstalled" ]
-		},
-		acrobat: {
-			substrs: [ "Adobe", "Acrobat" ],
-			progIds: [ "AcroPDF.PDF", "PDF.PDFCtrl.5" ]
-		},
-		flash: {
-			substrs: [ "Shockwave", "Flash" ],
-			progIds: [ "ShockwaveFlash.ShockwaveFlash" ]
-		},
-		director: {
-			substrs: [ "Shockwave", "Director" ],
-			progIds: [ "SWCtl.SWCtl" ]
-		},
-		quicktime: {
-			substrs: [ "QuickTime" ],
-			progIds: [ "" ]
-		},
-		real: {
-			substrs: [ "RealPlayer" ],
-			progIds: [
-				"rmocx.RealPlayer G2 Control",
-				"RealPlayer.RealPlayer(tm) ActiveX Control (32-bit)",
-				"RealVideo.RealVideo(tm) ActiveX Control (32-bit)"
-			]
-		},
-		mediaplayer: {
-			substrs: [ "Windows Media" ],
-			progIds: [ "MediaPlayer.MediaPlayer" ]
-		},
-		silverlight: {
-			substrs: [ "Silverlight" ],
-			progIds: [ "AgControl.AgControl" ]
-		}
-	};
-	
+
 	for (var alias in plugins) {
 		var plugin = plugins[alias];
 
-		if (detectPlugin(plugin.substrs) || detectObject(plugin.progIds)) {
+		if (detectPlugin(plugin.substrs)
+			|| detectObject(plugin.progIds, plugin.fns)) {
 	        $("plugin_" + alias).src = "i/plugin/ok.gif";
 		}
 	}
 	
 	$("google_q").focus();
 };
-</script>
-<script type="text/javascript">
-if (navigator.userAgent.indexOf("MSIE") != -1
-	&& navigator.userAgent.indexOf("Win") != -1) {
-    document.writeln('<script language="VBscript">');
-
-    document.writeln('\'do a one-time test for a version of VBScript that can handle this code');
-    document.writeln('detectableWithVB = False');
-    document.writeln('If ScriptEngineMajorVersion >= 2 then');
-    document.writeln('  detectableWithVB = True');
-    document.writeln('End If');
-
-    document.writeln('\'this next function will detect most plugins');
-    document.writeln('Function detectActiveXControl(activeXControlName)');
-    document.writeln('  on error resume next');
-    document.writeln('  detectActiveXControl = False');
-    document.writeln('  If detectableWithVB Then');
-    document.writeln('     detectActiveXControl = IsObject(CreateObject(activeXControlName))');
-    document.writeln('  End If');
-    document.writeln('End Function');
-
-    document.writeln('\'and the following function handles QuickTime');
-    document.writeln('Function detectQuickTimeActiveXControl()');
-    document.writeln('  on error resume next');
-    document.writeln('  detectQuickTimeActiveXControl = False');
-    document.writeln('  If detectableWithVB Then');
-    document.writeln('    detectQuickTimeActiveXControl = False');
-    document.writeln('    hasQuickTimeChecker = false');
-    document.writeln('    Set hasQuickTimeChecker = CreateObject("QuickTimeCheckObject.QuickTimeCheck")');
-    document.writeln('    If IsObject(hasQuickTimeChecker) Then');
-    document.writeln('      If hasQuickTimeChecker.IsQuickTimeAvailable(0) Then ');
-    document.writeln('        detectQuickTimeActiveXControl = True');
-    document.writeln('      End If');
-    document.writeln('    End If');
-    document.writeln('  End If');
-    document.writeln('End Function');
-
-    document.writeln('</scr' + 'ipt>');
-}
-// -->
 </script>
 </head>
 
@@ -175,6 +139,7 @@ if (navigator.userAgent.indexOf("MSIE") != -1
         </table>
     </td>
 </tr>
+<script type="text/javascript">$("ie_warn").style.display = "none";</script>
 <tr class="white">
     <td width="10"><img src="i/s.gif" width="10" alt=""></td>
     <td width="521">
@@ -390,6 +355,7 @@ if (navigator.userAgent.indexOf("MSIE") != -1
 
 </body>
 
+<script type="text/javascript">init();</script>
 <script src="http://browsersize.uservoice.com/pages/general/widgets/tab.js?alignment=right&amp;color=00BCBA" type="text/javascript"></script>
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
