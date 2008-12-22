@@ -9,16 +9,15 @@
 <meta name="description" content="A nifty online tool for setting your browser size while doing Web design.">
 <link rel="stylesheet" type="text/css" href="main.css?200812211121">
 <script type="text/javascript">
-window.onload = function () {
-	function $(id) { return document.getElementById(id); }
+function $(id) { return document.getElementById(id); }
 
-	$("ie_warn").style.display = "none";
-
+function addLinks() {
 	var setFn = function (w, h) {
 		if (w > window.screen.width || h > window.screen.height) {
 			window.moveTo(0,0);
 		}
-		window.resizeTo(w,h);
+
+		window.resizeTo(w, h);
 	};
 
 	var anchors = $("sizes").getElementsByTagName("a");
@@ -52,6 +51,7 @@ window.onload = function () {
         </table>
     </td>
 </tr>
+<script type="text/javascript">$("ie_warn").style.display = "none";</script>
 <tr class="white">
     <td width="10"><img src="i/s.gif" width="10" alt=""></td>
     <td width="521">
@@ -162,6 +162,7 @@ Your generosity will help keep this service up and running, free of any ads.</p>
 
 </body>
 
+<script type="text/javascript">addLinks();</script>
 <script src="http://browsersize.uservoice.com/pages/general/widgets/tab.js?alignment=right&amp;color=00BCBA" type="text/javascript"></script>
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
