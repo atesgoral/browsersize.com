@@ -93,12 +93,10 @@ var plugins = {
 
 function init() {
 	var uniwin = {
-		width: window.innerWidth != undefined
-			? window.innerWidth
-			: document.body.offsetWidth,
-		height: window.innerHeight != undefined
-			? window.innerHeight
-			: document.body.offsetHeight
+		width: window.innerWidth || document.documentElement.clientWidth
+			|| document.body.offsetWidth,
+		height: window.innerHeight || document.documentElement.clientHeight
+			|| document.body.offsetHeight
 	};
 
 	$("info_sw").innerHTML = screen.width;
@@ -349,7 +347,7 @@ function init() {
     </td>
 </tr>
 <tr>
-    <td colspan="2"><div class="copyright_sub">copyright &copy; 2005-2008 - Ates Goral - <a href="http://magnetiq.com/">magnetiq.com</a> - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/2.0/">Creative Commons License</a>.</div></td>
+    <td colspan="2"><div class="copyright_sub">copyright &copy; 2005-2008 - Ates Goral - <a href="http://magnetiq.com/">magnetiq.com</a></div></td>
 </tr>
 </table>
 
