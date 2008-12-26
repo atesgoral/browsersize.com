@@ -7,7 +7,7 @@
 <meta name="generator" content="UltraEdit-32">
 <meta name="author" content="Ates Goral">
 <meta name="description" content="Find out your browser's current size plus more...">
-<link rel="stylesheet" type="text/css" href="main.css?200812211150">
+<link rel="stylesheet" type="text/css" href="main.css?200812260904">
 <script type="text/javascript">
 function $(id) { return document.getElementById(id); }
 
@@ -127,17 +127,13 @@ function init() {
 <body class="whatsmy">
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr id="ie_warn">
-    <td colspan="3" class="ie_warn">
-        <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-            <td><img src="i/ie_shield.gif" width="22" height="23" alt="!"></td>
-            <td class="ie_text">If you're reading this message, your browser might have blocked the execution of JavaScript on this page - which will only safely resize your browser on your own will.</td>
-        </tr>
-        </table>
+<tr id="info">
+    <td colspan="3">
+    	<span class="warning">Warning: </span>
+    	If you're reading this message, JavaScript is probably currently disabled, blocked or not supported by your browser. This page strictly requires JavaScript to operate. Please enable JavaScript or switch to a browser that supports it.
     </td>
 </tr>
-<script type="text/javascript">$("ie_warn").style.display = "none";</script>
+<script type="text/javascript">$("info").style.display = "none";</script>
 <tr class="white">
     <td width="10"><img src="i/s.gif" width="10" alt=""></td>
     <td width="521">
