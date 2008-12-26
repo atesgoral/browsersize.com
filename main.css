@@ -4,8 +4,10 @@ body {
     padding: 0px;
     margin-bottom: 10px;
 }
-td {
+body, td, input {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+td {
     font-size: 11px;
     color: #575853;
     line-height: 97%;
@@ -18,7 +20,6 @@ a:hover {
     color: #005FAD;
 }
 input {
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
     font-size: 15px;
     font-weight: bold;
 }
@@ -126,7 +127,7 @@ td.stats_title {
     padding-top: 4px;
     padding-bottom: 6px;
 }
-tr#button input {
+tr.button input {
     width: 100%;
     
 }
@@ -193,4 +194,131 @@ a.plugin {
 }
 a.plugin:hover {
     background-color: #CECECE;
+}
+
+.buttons a {
+	display: block;
+	width: 137px;
+	height: 28px;
+    background: #EFEFEF url(i/button_bg.gif) no-repeat;
+	text-align: center;
+	font-size: 15px;
+	font-weight: bold;
+	line-height: 28px;
+	/*text-decoration: none;*/
+}
+
+.buttons a:hover {
+    background-color: #CECECE;
+}
+
+.label {
+    text-align: right;
+    font-weight: bold;
+}
+
+.text_under {
+    text-align: center;
+}
+
+.plugin_overlay {
+    position: relative;
+    left: 39px;
+    top: 53px;
+    z-index: 1;
+}
+
+.v_bottom {
+    vertical-align: bottom;
+}
+
+td.mini {
+    background-image: url(i/mini/client.gif);
+    text-align: center;
+    vertical-align: top;
+}
+
+td.mini input {
+    font-size: 1px;
+    font-family: sans-serif;
+    padding: 0px;
+    margin-top: 13px;
+    width: 32px;
+}
+
+.round_t {
+    background-image: url(i/round_tm.gif);
+}
+
+.round_l {
+    background-image: url(i/round_l.gif);
+}
+
+.round_r {
+    background-image: url(i/round_r.gif);
+}
+
+.round_b {
+    background-image: url(i/round_bm.gif);
+}
+
+.desktop {
+    background-color: #C2D07F;
+    background-image: url(i/mini/taskbar.gif);
+    background-repeat: repeat-x;
+    background-position: bottom;
+    border: 1px solid #8F9088;
+    vertical-align: top;
+    padding: 5px;
+}
+
+table.mini td {
+    font-size: 11px;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: #8F9088;
+    text-align: center;
+}
+
+a.mini_close {
+    background-color: #E69A9A;
+    display: block;
+}
+
+a.mini_close:hover {
+    background-color: #DE6262;
+}
+
+td.mini_buttons a {
+    background-color: #8F9088;
+    display: block;
+}
+
+td.mini_buttons a:hover {
+    background-color: #404040;
+}
+
+form {
+    margin: 0px;
+    padding: 0px;
+}
+
+.mini_toppad {
+    padding-top: 2px;
+}
+
+.mini_leftpad {
+    padding-left: 2px;
+}
+#info td {
+	background: #333;
+	color: #c0c0c0;
+    padding: 10px;
+    font-size: 13px;
+    border-bottom: 1px solid #000;
+}
+.setmy #info .warning {
+	color: #EE6D00;
+}
+.whatsmy #info .warning {
+	color: #86A200;
 }
