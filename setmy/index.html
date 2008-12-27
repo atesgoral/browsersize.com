@@ -16,10 +16,9 @@ function init() {
 		var n = window, d = document, s = n.screen;
 
 		function r(o) {
-			n.resizeTo(w, h + o);
+			n.resizeTo(w + o, h);
 
-			return n.innerHeight || d.documentElement.clientHeight
-				|| d.body.offsetHeight;
+			return n.innerWidth || d.body.clientWidth;
 		}
 		
 		function c(t, u) {
