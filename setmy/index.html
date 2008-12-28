@@ -7,7 +7,7 @@
 <meta name="generator" content="UltraEdit-32">
 <meta name="author" content="Ates Goral">
 <meta name="description" content="A nifty online tool for setting your browser size while doing Web design.">
-<link rel="stylesheet" type="text/css" href="main.css?200812260904">
+<link rel="stylesheet" type="text/css" href="main.css?200812271631">
 <script type="text/javascript">
 function $(id) { return document.getElementById(id); }
 
@@ -27,8 +27,11 @@ function init() {
 
 		if (r(1) == r(0)) {
 			if (typeof p == "undefined" || p.closed) {
+				$("info").className = "no_popup";
+
 				p = n.open(n.location.href, "resize_popup",
-					"menubar,toolbar,location,directories,status,resizable,titlebar".replace(/,/g, "=yes,")
+					"menubar,toolbar,location,directories,status,resizable,titlebar"
+						.replace(/,/g, "=yes,")
 					+ ",width=" + w + ",height=" + h
 					+ ",left=" + c(s.width, w) + ",top=" + c(s.height, h));
 			} else {
@@ -42,6 +45,10 @@ function init() {
 		if (w > s.width || h > s.height) {
 			n.moveTo(0,0);
 		}
+	};
+	
+	if (window.name == "resize_popup" && window.opener) {
+		window.opener.$("info").className = "no_resize";
 	}
 
 	var anchors = $("sizes").getElementsByTagName("a");
@@ -68,20 +75,44 @@ function init() {
 			window.history.back();
 		}
 	}
-};
+}
+
+function dismissInfo() {
+	$("info").className = "hidden";
+}
 </script>
 </head>
 
 <body class="setmy">
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr id="info">
+<tr id="info" class="no_js">
     <td colspan="3">
-    	<span class="warning">Warning: </span>
-    	If you're reading this message, JavaScript is probably currently disabled, blocked or not supported by your browser. This page strictly requires JavaScript to operate. Please enable JavaScript or switch to a browser that supports it.
+    	<span id="info_label">Attention: </span>
+    	<span class="info_text" id="info_text_no_js">
+    		JavaScript is probably currently disabled, blocked or not supported
+    		by your browser. This page strictly requires JavaScript to operate.
+    		Please enable JavaScript or switch to a browser that supports it.
+    	</span>
+    	<span class="info_text" id="info_text_resize_common">
+    		Your current browser settings probably do not allow the resizing of
+    		this window, the window is maximized or the target browser size is
+    		larger than your desktop size.
+    	</span>
+    	<span class="info_text" id="info_text_no_popup">
+    		As a workaround, an attempt to open a new popup window that is
+    		resizable has been made, but the popup has probably been blocked.
+    		Please enable popups for this page. 
+    	</span>
+    	<span class="info_text" id="info_text_no_resize">
+    		As a workaround, a new popup window has been opened.
+    	</span>
+    	If you think that this assumption was in error, please let
+    	<a href="mailto:ates@magnetiq.com">me</a> know.
+    	<span id="info_dismiss">[ <a href="javascript:dismissInfo()">X</a> ]</span>
     </td>
 </tr>
-<script type="text/javascript">$("info").style.display = "none";</script>
+<script type="text/javascript">dismissInfo()</script>
 <tr class="white">
     <td width="10"><img src="i/s.gif" width="10" alt=""></td>
     <td width="521">
@@ -107,7 +138,7 @@ function init() {
     </td>
 </tr>
 <tr>
-    <td rowspan="7"></td>
+    <td rowspan="5"></td>
     <td colspan="2">
         <table cellspacing="0" cellpadding="0" border="0" width="521">
             <tr>
@@ -151,7 +182,7 @@ Your generosity will help keep this service up and running, free of any ads.</p>
         </table>
     </td>
 </tr>
-<tr>
+<!--tr>
     <td colspan="2">
         <table cellspacing="0" cellpadding="0" border="0" width="521">
             <tr><td height="10" colspan="2"></td></tr>
@@ -196,7 +227,7 @@ Your generosity will help keep this service up and running, free of any ads.</p>
             </tr>
         </table>
     </td>
-</tr>
+</tr-->
 <tr>
     <td colspan="2">
         <table cellspacing="0" cellpadding="0" border="0" width="521">
