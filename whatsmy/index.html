@@ -7,7 +7,7 @@
 <meta name="generator" content="UltraEdit-32">
 <meta name="author" content="Ates Goral">
 <meta name="description" content="Find out your browser's current size plus more...">
-<link rel="stylesheet" type="text/css" href="main.css?200812260904">
+<link rel="stylesheet" type="text/css" href="main.css?200812271631">
 <script type="text/javascript">
 function $(id) { return document.getElementById(id); }
 
@@ -49,7 +49,7 @@ function detectObject(progIds, fns) {
 	}
 
  	return false;
-};
+}
 
 var plugins = {
 	java: {
@@ -120,20 +120,30 @@ function init() {
 	}
 	
 	$("google_q").focus();
-};
+}
+
+function dismissInfo() {
+	$("info").className = "hidden";
+}
 </script>
 </head>
 
 <body class="whatsmy">
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr id="info">
+<tr id="info" class="no_js">
     <td colspan="3">
-    	<span class="warning">Warning: </span>
-    	If you're reading this message, JavaScript is probably currently disabled, blocked or not supported by your browser. This page strictly requires JavaScript to operate. Please enable JavaScript or switch to a browser that supports it.
+    	<span id="info_label">Attention: </span>
+    	<span class="info_text" id="info_text_no_js">
+    		JavaScript is probably currently disabled, blocked or not supported
+    		by your browser. This page strictly requires JavaScript to operate.
+    		Please enable JavaScript or switch to a browser that supports it.
+    	</span>
+    	If you think that this assumption was in error, please let
+    	<a href="mailto:ates@magnetiq.com">me</a> know.
     </td>
 </tr>
-<script type="text/javascript">$("info").style.display = "none";</script>
+<script type="text/javascript">dismissInfo()</script>
 <tr class="white">
     <td width="10"><img src="i/s.gif" width="10" alt=""></td>
     <td width="521">
