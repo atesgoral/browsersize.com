@@ -9,8 +9,8 @@ body, td, input {
 }
 td {
     font-size: 11px;
+    line-height: 98%;
     color: #575853;
-    line-height: 97%;
     vertical-align: top;
 }
 a {
@@ -111,21 +111,6 @@ td.stats_title {
 }
 .border_l {
     border-left: 1px solid white;
-}
-.ie_warn {
-    background-color: #FFFFE1;
-    background-image: url(i/ie_bg.gif);
-    background-repeat: repeat-x;
-    background-position: bottom;
-    border-top: 2px solid white;
-}
-.ie_text {
-    vertical-align: 50%;
-    color: black;
-    font-family: Tahoma, Helvetica, sans-serif;
-    line-height: 120%;
-    padding-top: 4px;
-    padding-bottom: 6px;
 }
 tr.button input {
     width: 100%;
@@ -316,9 +301,17 @@ form {
     font-size: 13px;
     border-bottom: 1px solid #000;
 }
-.setmy #info .warning {
+.setmy #info_label {
 	color: #EE6D00;
 }
-.whatsmy #info .warning {
+.whatsmy #info_label {
 	color: #86A200;
+}
+.hidden, .info_text, .no_js #info_dismiss {
+	display: none;
+}
+.no_js #info_text_no_js, .no_popup #info_text_resize_common,
+	.no_resize #info_text_resize_common, .no_popup #info_text_no_popup,
+	.no_resize #info_text_no_resize {
+	display: inline;
 }
