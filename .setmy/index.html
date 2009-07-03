@@ -16,7 +16,7 @@ function init() {
 		var n = window, d = document, s = n.screen;
 
 		function r(o) {
-			n.resizeTo(w + o, h);
+			n.resizeTo(Number(w) + o, h);
 
 			return n.innerWidth || d.body.clientWidth;
 		}
@@ -30,8 +30,8 @@ function init() {
 				$("info").className = "no_popup";
 
 				p = n.open(n.location.href, "resize_popup",
-					"menubar,toolbar,location,directories,status,resizable,titlebar"
-						.replace(/,/g, "=yes,")
+					"menubar,toolbar,location,directories,status,resizable,titlebar,"
+						.split(",").join("=yes,")
 					+ ",width=" + w + ",height=" + h
 					+ ",left=" + c(s.width, w) + ",top=" + c(s.height, h));
 			} else {
@@ -43,7 +43,7 @@ function init() {
 		}
 
 		if (w > s.width || h > s.height) {
-			n.moveTo(0,0);
+			n.moveTo(0, 0);
 		}
 	};
 	
