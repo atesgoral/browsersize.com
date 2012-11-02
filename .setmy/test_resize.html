@@ -1,0 +1,11 @@
+<button data-width="1024" data-height="768">Resize to 1024 x 768</button>
+<button data-width="800" data-height="600">Resize to 800 x 600</button>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+$(function () {
+    $("button").click(function () {
+        var dimensions = $(this).data();
+        window.resizeTo(dimensions.width, dimensions.height);
+    });
+});
+</script>
