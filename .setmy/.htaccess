@@ -4,3 +4,5 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . /index.html [L]
 </IfModule>
+
+Action php54-cgi /php54.cgi
