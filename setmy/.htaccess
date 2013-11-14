@@ -1,3 +1,9 @@
+Action php54-cgi /php54.cgi
+
+<FilesMatch \.php$>
+  SetHandler php54-cgi
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
@@ -5,4 +11,3 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . /index.html [L]
 </IfModule>
 
-Action php54-cgi /php54.cgi
