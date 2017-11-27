@@ -74,17 +74,23 @@ function init() {
         }
     }
 
-    var uniwin = {
-        width: window.innerWidth || document.documentElement.clientWidth
-            || document.body.offsetWidth,
-        height: window.innerHeight || document.documentElement.clientHeight
-            || document.body.offsetHeight
-    };
+    function updateSizes() {
+        var uniwin = {
+            width: window.innerWidth || document.documentElement.clientWidth
+                || document.body.offsetWidth,
+            height: window.innerHeight || document.documentElement.clientHeight
+                || document.body.offsetHeight
+        };
 
-    // $("info_sw").innerHTML = screen.width;
-    // $("info_sh").innerHTML = screen.height;
-    // $("info_ww").innerHTML = uniwin.width;
-    // $("info_wh").innerHTML = uniwin.height;
+        $("info_sw").innerHTML = screen.width;
+        $("info_sh").innerHTML = screen.height;
+        $("info_ww").innerHTML = uniwin.width;
+        $("info_wh").innerHTML = uniwin.height;
+    }
+
+    updateSizes();
+
+    window.addEventListener('resize', updateSizes);
 }
 
 function dismissInfo() {
@@ -131,6 +137,20 @@ function dismissInfo() {
         </table>
     </td>
     <td class="v_middle">
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="10"></td>
+                <td class="lighter">Current:</td>
+            </tr>
+            <tr>
+                <td class="v_middle"><img src="i/arrow_r.gif" width="8" height="7" alt=""></td>
+                <td>Browser window size: <span id="info_ww">?</span> x <span id="info_wh">?</span></td>
+            </tr>
+            <tr>
+                <td class="v_middle"><img src="i/arrow_r.gif" width="8" height="7" alt=""></td>
+                <td>Screen size: <span id="info_sw">?</span> x <span id="info_sh">?</span></td>
+            </tr>
+        </table>
     </td>
 </tr>
 <tr>
