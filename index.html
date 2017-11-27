@@ -10,85 +10,85 @@
 function $(id) { return document.getElementById(id); }
 
 function init() {
-	var resizeWindow = function (w, h) {
-		var n = window, d = document, s = n.screen;
+    var resizeWindow = function (w, h) {
+        var n = window, d = document, s = n.screen;
 
-		function r(o) {
-			n.resizeTo(Number(w) + o, h);
+        function r(o) {
+            n.resizeTo(Number(w) + o, h);
 
-			return n.innerWidth || d.body.clientWidth;
-		}
+            return n.innerWidth || d.body.clientWidth;
+        }
 
-		function c(t, u) {
-			return t > u ? (t - u) >> 1 : 0;
-		}
+        function c(t, u) {
+            return t > u ? (t - u) >> 1 : 0;
+        }
 
-		if (r(1) == r(0)) {
-			if (typeof p == "undefined" || p.closed) {
-				$("info").className = "no_popup";
+        if (r(1) == r(0)) {
+            if (typeof p == "undefined" || p.closed) {
+                $("info").className = "no_popup";
 
-				p = n.open(n.location.href, "resize_popup",
-					"menubar,toolbar,location,directories,status,resizable,titlebar,"
-						.split(",").join("=yes,")
-					+ ",width=" + w + ",height=" + h
-					+ ",left=" + c(s.width, w) + ",top=" + c(s.height, h));
-			} else {
-				p.focus();
-			}
+                p = n.open(n.location.href, "resize_popup",
+                    "menubar,toolbar,location,directories,status,resizable,titlebar,"
+                        .split(",").join("=yes,")
+                    + ",width=" + w + ",height=" + h
+                    + ",left=" + c(s.width, w) + ",top=" + c(s.height, h));
+            } else {
+                p.focus();
+            }
 
-			p.resizeTo(w, h);
-			n = p;
-		}
+            p.resizeTo(w, h);
+            n = p;
+        }
 
-		if (w > s.width || h > s.height) {
-			n.moveTo(0, 0);
-		}
-	};
+        if (w > s.width || h > s.height) {
+            n.moveTo(0, 0);
+        }
+    };
 
-	if (window.name == "resize_popup" && window.opener) {
-		window.opener.$("info").className = "no_resize";
-	}
+    if (window.name == "resize_popup" && window.opener) {
+        window.opener.$("info").className = "no_resize";
+    }
 
-	var anchors = $("sizes").getElementsByTagName("a");
+    var anchors = $("sizes").getElementsByTagName("a");
 
-	for (var i = 0; i < anchors.length; i++) {
-		var anchor = anchors[i];
+    for (var i = 0; i < anchors.length; i++) {
+        var anchor = anchors[i];
 
-		anchor.href =
-			"javascript:(" + resizeWindow.toString().replace(/\s/g, "")
-				.replace(/(function(?!\()|return|typeof|var)/g, "$1 ")
-			+ ")(" + anchor.innerHTML.replace(/ x/, ",") + ");";
-	}
+        anchor.href =
+            "javascript:(" + resizeWindow.toString().replace(/\s/g, "")
+                .replace(/(function(?!\()|return|typeof|var)/g, "$1 ")
+            + ")(" + anchor.innerHTML.replace(/ x/, ",") + ");";
+    }
 
-	$("set_custom").onclick = function () {
-		resizeWindow($("width").value, $("height").value);
-	};
+    $("set_custom").onclick = function () {
+        resizeWindow($("width").value, $("height").value);
+    };
 
-	var tokens = /\?(\d+)x(\d+)(!?)$/.exec(window.location.search);
+    var tokens = /\?(\d+)x(\d+)(!?)$/.exec(window.location.search);
 
-	if (tokens) {
-		resizeWindow(tokens[1], tokens[2]);
+    if (tokens) {
+        resizeWindow(tokens[1], tokens[2]);
 
-		if (tokens[3] == "!") {
-			window.history.back();
-		}
-	}
+        if (tokens[3] == "!") {
+            window.history.back();
+        }
+    }
 
-	var uniwin = {
-		width: window.innerWidth || document.documentElement.clientWidth
-			|| document.body.offsetWidth,
-		height: window.innerHeight || document.documentElement.clientHeight
-			|| document.body.offsetHeight
-	};
+    var uniwin = {
+        width: window.innerWidth || document.documentElement.clientWidth
+            || document.body.offsetWidth,
+        height: window.innerHeight || document.documentElement.clientHeight
+            || document.body.offsetHeight
+    };
 
-	// $("info_sw").innerHTML = screen.width;
-	// $("info_sh").innerHTML = screen.height;
-	// $("info_ww").innerHTML = uniwin.width;
-	// $("info_wh").innerHTML = uniwin.height;
+    // $("info_sw").innerHTML = screen.width;
+    // $("info_sh").innerHTML = screen.height;
+    // $("info_ww").innerHTML = uniwin.width;
+    // $("info_wh").innerHTML = uniwin.height;
 }
 
 function dismissInfo() {
-	$("info").className = "hidden";
+    $("info").className = "hidden";
 }
 </script>
 </head>
@@ -98,28 +98,28 @@ function dismissInfo() {
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr id="info" class="no_js">
     <td colspan="3">
-    	<span id="info_label">Attention: </span>
-    	<span class="info_text" id="info_text_no_js">
-    		JavaScript is probably currently disabled, blocked or not supported
-    		by your browser. This page strictly requires JavaScript to operate.
-    		Please enable JavaScript or switch to a browser that supports it.
-    	</span>
-    	<span class="info_text" id="info_text_resize_common">
-    		Your current browser settings probably do not allow the resizing of
-    		this window, the window is maximized or the target browser size is
-    		larger than your desktop size.
-    	</span>
-    	<span class="info_text" id="info_text_no_popup">
-    		As a workaround, an attempt to open a new popup window that is
-    		resizable has been made, but the popup has probably been blocked.
-    		Please enable popups for this page.
-    	</span>
-    	<span class="info_text" id="info_text_no_resize">
-    		As a workaround, a new popup window has been opened.
-    	</span>
-    	If you think that this assumption was in error, please
-    	<a href="https://github.com/atesgoral/browsersize.com/issues">open an issue</a>.
-    	<span id="info_dismiss">[ <a href="javascript:dismissInfo()">X</a> ]</span>
+        <span id="info_label">Attention: </span>
+        <span class="info_text" id="info_text_no_js">
+            JavaScript is probably currently disabled, blocked or not supported
+            by your browser. This page strictly requires JavaScript to operate.
+            Please enable JavaScript or switch to a browser that supports it.
+        </span>
+        <span class="info_text" id="info_text_resize_common">
+            Your current browser settings probably do not allow the resizing of
+            this window, the window is maximized or the target browser size is
+            larger than your desktop size.
+        </span>
+        <span class="info_text" id="info_text_no_popup">
+            As a workaround, an attempt to open a new popup window that is
+            resizable has been made, but the popup has probably been blocked.
+            Please enable popups for this page.
+        </span>
+        <span class="info_text" id="info_text_no_resize">
+            As a workaround, a new popup window has been opened.
+        </span>
+        If you think that this assumption was in error, please
+        <a href="https://github.com/atesgoral/browsersize.com/issues">open an issue</a>.
+        <span id="info_dismiss">[ <a href="javascript:dismissInfo()">X</a> ]</span>
     </td>
 </tr>
 <script type="text/javascript">dismissInfo()</script>
@@ -212,7 +212,7 @@ function dismissInfo() {
                     </div>
                 </td>
                 <td class="doc">
-                	Click on one of the links on the left to set your browser's size by going to a URL.
+                    Click on one of the links on the left to set your browser's size by going to a URL.
                     <p>You can create your own links that specify arbitrary dimensions. Start with "https://browsersize.com/", append the width, an "x" as the delimiter and finally the height.
                     A "!" at the end makes the browser go back to the page that you were previously on.</p>
                 </td>
@@ -250,7 +250,7 @@ function dismissInfo() {
                     </table>
                 </td>
                 <td class="doc">
-                	To set your browser's size to a custom size, enter the width and height and click <strong>Set</strong>.
+                    To set your browser's size to a custom size, enter the width and height and click <strong>Set</strong>.
                 </td>
             </tr>
         </table>
