@@ -64,7 +64,7 @@ function init() {
 		resizeWindow($("width").value, $("height").value);
 	};
 
-	var tokens = /\/(\d+)x(\d+)(!?)$/.exec(window.location.pathname);
+	var tokens = /\?(\d+)x(\d+)(!?)$/.exec(window.location.search);
 
 	if (tokens) {
 		resizeWindow(tokens[1], tokens[2]);
@@ -73,6 +73,18 @@ function init() {
 			window.history.back();
 		}
 	}
+
+	var uniwin = {
+		width: window.innerWidth || document.documentElement.clientWidth
+			|| document.body.offsetWidth,
+		height: window.innerHeight || document.documentElement.clientHeight
+			|| document.body.offsetHeight
+	};
+
+	// $("info_sw").innerHTML = screen.width;
+	// $("info_sh").innerHTML = screen.height;
+	// $("info_ww").innerHTML = uniwin.width;
+	// $("info_wh").innerHTML = uniwin.height;
 }
 
 function dismissInfo() {
@@ -105,8 +117,8 @@ function dismissInfo() {
     	<span class="info_text" id="info_text_no_resize">
     		As a workaround, a new popup window has been opened.
     	</span>
-    	If you think that this assumption was in error, please let
-    	<a href="mailto:ates@magnetiq.com">me</a> know.
+    	If you think that this assumption was in error, please
+    	<a href="https://github.com/atesgoral/browsersize.com/issues">open an issue</a>.
     	<span id="info_dismiss">[ <a href="javascript:dismissInfo()">X</a> ]</span>
     </td>
 </tr>
